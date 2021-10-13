@@ -1,7 +1,8 @@
-import { useRecoilValue, useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { loginState, componentState } from "../store/basic";
 import { Login } from "../components/login";
 import { Chat } from "../components/chat";
+import { CodeShare } from "../components/codeshare";
 
 const Component = () => {
   const componentName = useRecoilValue(componentState);
@@ -10,7 +11,7 @@ const Component = () => {
     case "chat":
       return <Chat />;
     case "codeshare":
-      return <></>;
+      return <CodeShare />;
     default:
       return <></>;
   }
