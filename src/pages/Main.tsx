@@ -1,6 +1,7 @@
 import { useRecoilValue } from "recoil";
 import { loginState } from "../store/basic";
 import { Login } from "../components/login";
+import { Chat } from "../components/chat";
 
 export const Main = () => {
   const isLogin = useRecoilValue(loginState);
@@ -14,7 +15,9 @@ export const Main = () => {
             <span> </span>
             <button>code share example</button>
           </div>
-          <div></div>
+          <div>
+            <Chat />
+          </div>
         </>
       ) : (
         <Login />
