@@ -10,6 +10,11 @@ export const userDataState = atom({
   default: {},
 });
 
+export const projectListState = atom({
+  key: "projectList",
+  default: [] as any[],
+});
+
 export const userNameState = atom({
   key: "userName",
   default: "",
