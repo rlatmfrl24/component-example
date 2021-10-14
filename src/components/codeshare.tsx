@@ -4,6 +4,7 @@ import { fromMonaco } from "@hackerrank/firepad";
 import firebase from "firebase";
 import { useRecoilValue } from "recoil";
 import { userNameState } from "../store/basic";
+require("dotenv").config();
 
 export const CodeShare = () => {
   const userName = useRecoilValue(userNameState);
@@ -31,15 +32,6 @@ export const CodeShare = () => {
     setJsEditorLoaded(true);
   }
 
-  const editorRef = useRef(null);
-
-  const [editorLoaded, setEditorLoaded] = useState(false);
-
-  function handleEditorDidMount(editor: any, monaco: Monaco) {
-    editorRef.current = editor;
-    setEditorLoaded(true);
-  }
-
   useEffect(() => {
     if (!htmlEditorLoaded || !cssEditorLoaded || !jsEditorLoaded) {
       // If editor is not loaded return
@@ -56,7 +48,7 @@ export const CodeShare = () => {
     htmlFirePad.setUserName(userName);
     cssFirePad.setUserName(userName);
     jsFirePad.setUserName(userName);
-  }, [htmlEditorLoaded, cssEditorLoaded, jsEditorLoaded]);
+  }, [htmlEditorLoaded, cssEditorLoaded, jsEditorLoaded, userName]);
 
   return (
     <div>

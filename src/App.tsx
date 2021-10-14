@@ -3,17 +3,18 @@ import "./App.css";
 import { Main } from "./pages/Main";
 import { RecoilRoot } from "recoil";
 import firebase from "firebase";
+require("dotenv").config();
 
 function App() {
   useEffect(() => {
     const firebaseConfig = {
-      apiKey: "AIzaSyBD-pyo965crb_DGgJDNfQPi6KutSnHnU4",
+      apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
       authDomain: "dontpanic-zerone.firebaseapp.com",
       projectId: "dontpanic-zerone",
       storageBucket: "dontpanic-zerone.appspot.com",
-      messagingSenderId: "510449137891",
-      appId: "1:510449137891:web:019592d099b977e197edd6",
-      measurementId: "G-BW5ZW4MXJ4",
+      messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+      appId: process.env.REACT_APP_FIREBASE_APP_ID,
+      measurementId: process.env.REACT_APP_MEASUREMENT_ID,
     };
     if (!firebase.apps.length) {
       // Make sure initialization happens only once
