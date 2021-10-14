@@ -6,7 +6,6 @@ require("dotenv").config();
 
 export const Chat = () => {
   const userName = useRecoilValue(userNameState);
-  console.log(process.env.REACT_APP_CHAT_CHANNEL_URL);
 
   return (
     <>
