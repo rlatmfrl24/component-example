@@ -1,24 +1,25 @@
-import firebase from "firebase";
-import axios from "axios";
-import Editor, { Monaco } from "@monaco-editor/react";
 import { useEffect, useRef, useState } from "react";
+import { useRecoilValue } from "recoil";
+import { userNameState } from "../store/basic";
+import Editor, { Monaco } from "@monaco-editor/react";
 import { fromMonaco } from "@hackerrank/firepad";
-import { useRecoilValue, useRecoilState } from "recoil";
-import { userNameState, projectListState } from "../store/basic";
-require("dotenv").config();
+import firebase from "firebase";
 
-export const CodeShare = () => {
+type CodeShareProps = {
+  id: string;
+};
+
+export const CodeShare: React.FC<CodeShareProps> = (props) => {
   const userName = useRecoilValue(userNameState);
-  const [projectList, setProjectList] = useRecoilState(projectListState);
-  const [currentProjectId, setCurrentProjectId] = useState("");
-
-  const htmlEditorRef = useRef(null);
-  const cssEditorRef = useRef(null);
-  const jsEditorRef = useRef(null);
+  const projectId = props.id;
 
   const [htmlEditorLoaded, setHtmlEditorLoaded] = useState(false);
   const [cssEditorLoaded, setCssEditorLoaded] = useState(false);
   const [jsEditorLoaded, setJsEditorLoaded] = useState(false);
+
+  const htmlEditorRef = useRef(null);
+  const cssEditorRef = useRef(null);
+  const jsEditorRef = useRef(null);
 
   function handleHtmlEditorDidMount(editor: any, monaco: Monaco) {
     htmlEditorRef.current = editor;
@@ -35,36 +36,17 @@ export const CodeShare = () => {
     setJsEditorLoaded(true);
   }
 
-  function timeout(delay: number) {
-    return new Promise((res) => setTimeout(res, delay));
-  }
-
-  useEffect(() => {
-    axios({
-      method: "GET",
-      url:
-        "https://us-central1-dontpanic-zerone.cloudfunctions.net/getProjectList?name=" +
-        userName,
-    })
-      .then((response) => {
-        setProjectList(response.data as any[]);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, [userName, setProjectList]);
-
   useEffect(() => {
     if (
       !htmlEditorLoaded ||
       !cssEditorLoaded ||
       !jsEditorLoaded ||
-      currentProjectId === ""
+      projectId === ""
     ) {
       // If editor is not loaded return
       return;
     }
-    const projectDBRef = firebase.database().ref().child(currentProjectId);
+    const projectDBRef = firebase.database().ref().child(projectId);
 
     const htmlCodeDBRef = projectDBRef.child("html");
     const cssCodeDBRef = projectDBRef.child("css");
@@ -77,34 +59,10 @@ export const CodeShare = () => {
     htmlFirePad.setUserName(userName);
     cssFirePad.setUserName(userName);
     jsFirePad.setUserName(userName);
-  }, [
-    htmlEditorLoaded,
-    cssEditorLoaded,
-    jsEditorLoaded,
-    userName,
-    currentProjectId,
-  ]);
+  }, [htmlEditorLoaded, cssEditorLoaded, jsEditorLoaded, userName, projectId]);
 
   return (
     <div>
-      <div>
-        <select
-          id="select-project-list"
-          name="project"
-          onChange={async (event) => {
-            setCurrentProjectId(event.target.value);
-          }}
-        >
-          <option value="">--Please choose an option--</option>
-          {projectList.map((project) => {
-            return (
-              <option key={project.id} value={project.id}>
-                {project.name}
-              </option>
-            );
-          })}
-        </select>
-      </div>
       <div style={{ width: "30vw", float: "left" }}>
         <Editor
           height="90vh"

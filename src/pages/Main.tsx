@@ -2,7 +2,7 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import { loginState, componentState } from "../store/basic";
 import { Login } from "../components/login";
 import { Chat } from "../components/chat";
-import { CodeShare } from "../components/codeshare";
+import { ProjectSelect } from "../components/projectselect";
 
 const Component = () => {
   const componentName = useRecoilValue(componentState);
@@ -11,7 +11,7 @@ const Component = () => {
     case "chat":
       return <Chat />;
     case "codeshare":
-      return <CodeShare />;
+      return <ProjectSelect />;
     default:
       return <></>;
   }
