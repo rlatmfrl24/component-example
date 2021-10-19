@@ -1,11 +1,12 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { projectListState, userCoreState } from "../store/basic";
+import { projectListState, UserData, userDataState } from "../store/basic";
 import { CodeShare } from "./codeshare";
+import SendBirdCall from "sendbird-calls";
 
 export const ProjectSelect = () => {
-  const userData = useRecoilValue(userCoreState);
+  const userData = useRecoilValue(userDataState) as UserData;
   const [projectList, setProjectList] = useRecoilState(projectListState);
   const [currentProjectId, setCurrentProjectId] = useState("");
 
@@ -14,7 +15,7 @@ export const ProjectSelect = () => {
       method: "GET",
       url:
         "https://us-central1-dontpanic-zerone.cloudfunctions.net/getProjectList?name=" +
-        userData.name,
+        userData.nickname,
     })
       .then((response) => {
         setProjectList(response.data as any[]);
@@ -22,7 +23,28 @@ export const ProjectSelect = () => {
       .catch((error) => {
         console.error(error);
       });
-  }, [userData.name, setProjectList]);
+  }, [userData.nickname, setProjectList]);
+
+  // Calls
+  // SendBirdCall.init(process.env.REACT_APP_CHAT_APP_ID!);
+
+  // const authOption = {
+  //   userId: "soulkey",
+  //   accessToken: "f5d3469f5fa46891e62e4123772d459ce24fded2",
+  // };
+
+  // SendBirdCall.authenticate(authOption, (result, error) => {
+  //   if (error) {
+  //     console.log(error);
+  //   } else {
+  //     console.log(result);
+  //   }
+  //   SendBirdCall.connectWebSocket()
+  //     .then(() => {})
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // });
 
   return (
     <div>

@@ -1,9 +1,11 @@
 import axios from "axios";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { loginState, userDataState, userCoreState } from "../store/basic";
+import { useState } from "react";
+import { useSetRecoilState } from "recoil";
+import { loginState, userDataState } from "../store/basic";
 
 export const Login = () => {
-  const userCore = useRecoilValue(userCoreState);
+  const [userName, setUserName] = useState("");
+  const [userColor, setUserColor] = useState("");
   const setUserData = useSetRecoilState(userDataState);
   const setIsLogin = useSetRecoilState(loginState);
 
@@ -15,7 +17,7 @@ export const Login = () => {
           id="nickname"
           placeholder="nickname"
           onChange={(event) => {
-            userCore.setName(event.target.value);
+            setUserName(event.target.value);
           }}
         />
       </div>
@@ -23,7 +25,7 @@ export const Login = () => {
         <select
           name="user-color"
           onChange={(event) => {
-            userCore.setColor(event.target.value);
+            setUserColor(event.target.value);
           }}
         >
           <option value="">--Please choose an option--</option>
@@ -64,8 +66,8 @@ export const Login = () => {
               method: "POST",
               url: "https://us-central1-dontpanic-zerone.cloudfunctions.net/loginUser",
               data: {
-                nickname: userCore.name,
-                slimeColor: userCore.color,
+                nickname: userName,
+                slimeColor: userColor,
                 userSkill: ["html", "css"],
               },
             })

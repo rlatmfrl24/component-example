@@ -1,20 +1,20 @@
 import { atom } from "recoil";
 
-class UserCore {
-  name: string;
-  color: string;
+export class UserData {
+  nickname: string;
+  slimeColor: string;
+  level: number;
+  isOnline: boolean;
+  userSkill: string[];
+  projects: string[];
 
-  constructor(name: string, color: string) {
-    this.name = name;
-    this.color = color;
-  }
-
-  setName(name: string) {
-    this.name = name;
-  }
-
-  setColor(color: string) {
-    this.color = color;
+  constructor(data: any) {
+    this.nickname = data.nickname;
+    this.slimeColor = data.slimeColor;
+    this.level = data.level;
+    this.isOnline = data.isOnline;
+    this.userSkill = data.userSkill;
+    this.projects = data.projects;
   }
 }
 
@@ -23,19 +23,21 @@ export const loginState = atom({
   default: false,
 });
 
-export const userDataState = atom({
-  key: "userData",
-  default: {},
-});
-
 export const projectListState = atom({
   key: "projectList",
   default: [] as any[],
 });
 
-export const userCoreState = atom({
+export const userDataState = atom({
   key: "userCore",
-  default: new UserCore("", ""),
+  default: new UserData({
+    nickname: "",
+    slimeColor: "",
+    level: -1,
+    isOnline: false,
+    userSkill: [],
+    projects: [],
+  }),
 });
 
 export const componentState = atom({

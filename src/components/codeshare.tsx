@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useRecoilValue } from "recoil";
-import { userCoreState } from "../store/basic";
+import { UserData, userDataState } from "../store/basic";
 import Editor, { Monaco } from "@monaco-editor/react";
 import { fromMonaco } from "@hackerrank/firepad";
 import firebase from "firebase";
@@ -10,7 +10,7 @@ type CodeShareProps = {
 };
 
 export const CodeShare: React.FC<CodeShareProps> = (props) => {
-  const userData = useRecoilValue(userCoreState);
+  const userData = useRecoilValue(userDataState) as UserData;
   const projectId = props.id;
 
   const [htmlEditorLoaded, setHtmlEditorLoaded] = useState(false);
@@ -56,12 +56,12 @@ export const CodeShare: React.FC<CodeShareProps> = (props) => {
     const cssFirePad = fromMonaco(cssCodeDBRef, cssEditorRef.current!);
     const jsFirePad = fromMonaco(jsCodeDBRef, jsEditorRef.current!);
 
-    htmlFirePad.setUserName(userData.name);
-    htmlFirePad.setUserColor(userData.color);
-    cssFirePad.setUserName(userData.name);
-    cssFirePad.setUserColor(userData.color);
-    jsFirePad.setUserName(userData.name);
-    jsFirePad.setUserColor(userData.color);
+    htmlFirePad.setUserName(userData.nickname);
+    htmlFirePad.setUserColor(userData.slimeColor);
+    cssFirePad.setUserName(userData.nickname);
+    cssFirePad.setUserColor(userData.slimeColor);
+    jsFirePad.setUserName(userData.nickname);
+    jsFirePad.setUserColor(userData.slimeColor);
   }, [htmlEditorLoaded, cssEditorLoaded, jsEditorLoaded, userData, projectId]);
 
   return (
