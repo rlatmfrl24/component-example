@@ -7,16 +7,13 @@ require("dotenv").config();
 export const Chat = () => {
   const userData = useRecoilValue(userDataState) as UserData;
 
-  console.log(userData.nickname);
-  console.log(process.env.REACT_APP_CHAT_APP_ID!);
-  console.log(process.env.REACT_APP_CHAT_CHANNEL_URL!);
   return (
     <>
       <span>
         <SendBirdProvider
           appId={process.env.REACT_APP_CHAT_APP_ID!}
-          userId="soulkey"
-          accessToken="f5d3469f5fa46891e62e4123772d459ce24fded2"
+          userId={userData.nickname}
+          accessToken={userData.sendbirdAccessToken}
           theme="dark"
         >
           <div style={{ height: "90vh", marginTop: "1em" }}>

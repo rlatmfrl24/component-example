@@ -7,6 +7,7 @@ export class UserData {
   isOnline: boolean;
   userSkill: string[];
   projects: string[];
+  sendbirdAccessToken: string;
 
   constructor(data: any) {
     this.nickname = data.nickname;
@@ -15,6 +16,7 @@ export class UserData {
     this.isOnline = data.isOnline;
     this.userSkill = data.userSkill;
     this.projects = data.projects;
+    this.sendbirdAccessToken = data.sendbirdAccessToken;
   }
 }
 
@@ -37,6 +39,7 @@ export const userDataState = atom({
     isOnline: false,
     userSkill: [],
     projects: [],
+    sendbirdAccessToken: "",
   }),
 });
 

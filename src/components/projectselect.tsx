@@ -26,25 +26,25 @@ export const ProjectSelect = () => {
   }, [userData.nickname, setProjectList]);
 
   // Calls
-  // SendBirdCall.init(process.env.REACT_APP_CHAT_APP_ID!);
+  SendBirdCall.init(process.env.REACT_APP_CHAT_APP_ID!);
 
-  // const authOption = {
-  //   userId: "soulkey",
-  //   accessToken: "f5d3469f5fa46891e62e4123772d459ce24fded2",
-  // };
+  const authOption = {
+    userId: "soulkey",
+    accessToken: "f5d3469f5fa46891e62e4123772d459ce24fded2",
+  };
 
-  // SendBirdCall.authenticate(authOption, (result, error) => {
-  //   if (error) {
-  //     console.log(error);
-  //   } else {
-  //     console.log(result);
-  //   }
-  //   SendBirdCall.connectWebSocket()
-  //     .then(() => {})
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // });
+  SendBirdCall.authenticate(authOption, (result, error) => {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log(result);
+    }
+    SendBirdCall.connectWebSocket()
+      .then(() => {})
+      .catch((error) => {
+        console.log(error);
+      });
+  });
 
   return (
     <div>
