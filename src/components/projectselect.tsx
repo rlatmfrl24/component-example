@@ -1,11 +1,11 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { projectListState, userNameState } from "../store/basic";
+import { projectListState, userCoreState } from "../store/basic";
 import { CodeShare } from "./codeshare";
 
 export const ProjectSelect = () => {
-  const userName = useRecoilValue(userNameState);
+  const userData = useRecoilValue(userCoreState);
   const [projectList, setProjectList] = useRecoilState(projectListState);
   const [currentProjectId, setCurrentProjectId] = useState("");
 
@@ -14,7 +14,7 @@ export const ProjectSelect = () => {
       method: "GET",
       url:
         "https://us-central1-dontpanic-zerone.cloudfunctions.net/getProjectList?name=" +
-        userName,
+        userData.name,
     })
       .then((response) => {
         setProjectList(response.data as any[]);
@@ -22,7 +22,7 @@ export const ProjectSelect = () => {
       .catch((error) => {
         console.error(error);
       });
-  }, [userName, setProjectList]);
+  }, [userData.name, setProjectList]);
 
   return (
     <div>

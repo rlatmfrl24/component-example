@@ -1,18 +1,18 @@
 import { SendBirdProvider, OpenChannel } from "sendbird-uikit";
 import "sendbird-uikit/dist/index.css";
 import { useRecoilValue } from "recoil";
-import { userNameState } from "../store/basic";
+import { userCoreState } from "../store/basic";
 require("dotenv").config();
 
 export const Chat = () => {
-  const userName = useRecoilValue(userNameState);
+  const userData = useRecoilValue(userCoreState);
 
   return (
     <>
       <span>
         <SendBirdProvider
           appId={process.env.REACT_APP_CHAT_APP_ID!}
-          userId={userName}
+          userId={userData.name}
           theme="dark"
         >
           <div style={{ height: "90vh", marginTop: "1em" }}>
