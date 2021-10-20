@@ -9,6 +9,7 @@ export const ProjectSelect = () => {
   const userData = useRecoilValue(userDataState) as UserData;
   const [projectList, setProjectList] = useRecoilState(projectListState);
   const [currentProjectId, setCurrentProjectId] = useState("");
+  const localMediaView = document.getElementById("local_video_element_id");
 
   useEffect(() => {
     axios({
@@ -26,28 +27,34 @@ export const ProjectSelect = () => {
   }, [userData.nickname, setProjectList]);
 
   // Calls
-  SendBirdCall.init(process.env.REACT_APP_CHAT_APP_ID!);
+  useEffect(() => {
+    SendBirdCall.init(process.env.REACT_APP_CHAT_APP_ID!);
 
-  const authOption = {
-    userId: "soulkey",
-    accessToken: "f5d3469f5fa46891e62e4123772d459ce24fded2",
-  };
+    const authOption = {
+      userId: userData.nickname,
+      accessToken: userData.sendbirdAccessToken,
+    };
 
-  SendBirdCall.authenticate(authOption, (result, error) => {
-    if (error) {
-      console.log(error);
-    } else {
-      console.log(result);
-    }
-    SendBirdCall.connectWebSocket()
-      .then(() => {})
-      .catch((error) => {
-        console.log(error);
+    SendBirdCall.authenticate(authOption, async (result, error) => {
+      await SendBirdCall.connectWebSocket();
+      const room = await SendBirdCall.fetchRoomById(
+        "8aabf35f-3744-44fa-8f08-80b827722739"
+      );
+      await room.enter({ videoEnabled: true, audioEnabled: true });
+      room.localParticipant.setMediaView(localMediaView as HTMLMediaElement);
+      room.on("remoteParticipantStreamStarted", (remoteParticipant) => {
+        const remoteMediaView = document.createElement("video");
+        remoteMediaView.autoplay = true;
+        remoteParticipant.setMediaView(remoteMediaView);
       });
-  });
+    });
+  }, [userData.nickname, userData.sendbirdAccessToken]);
 
   return (
     <div>
+      <div>
+        <video id="remote_video_element_id" autoPlay></video>
+      </div>
       <div>
         <select
           name="project-select"
