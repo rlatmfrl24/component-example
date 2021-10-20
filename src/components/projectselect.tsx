@@ -3,13 +3,15 @@ import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { projectListState, UserData, userDataState } from "../store/basic";
 import { CodeShare } from "./codeshare";
-import SendBirdCall from "sendbird-calls";
+import SendBirdCall, { Room } from "sendbird-calls";
 
 export const ProjectSelect = () => {
   const userData = useRecoilValue(userDataState) as UserData;
   const [projectList, setProjectList] = useRecoilState(projectListState);
   const [currentProjectId, setCurrentProjectId] = useState("");
+  const videoContainer = document.getElementById("video_container");
   const localMediaView = document.getElementById("local_video_element_id");
+  const [videoRoom, setVideoRoom] = useState(null as any);
 
   useEffect(() => {
     axios({
@@ -40,20 +42,43 @@ export const ProjectSelect = () => {
       const room = await SendBirdCall.fetchRoomById(
         "8aabf35f-3744-44fa-8f08-80b827722739"
       );
-      await room.enter({ videoEnabled: true, audioEnabled: true });
-      room.localParticipant.setMediaView(localMediaView as HTMLMediaElement);
-      room.on("remoteParticipantStreamStarted", (remoteParticipant) => {
-        const remoteMediaView = document.createElement("video");
-        remoteMediaView.autoplay = true;
-        remoteParticipant.setMediaView(remoteMediaView);
-      });
+
+      setVideoRoom(room);
+      if (videoRoom) {
+        await videoRoom.enter({ videoEnabled: true, audioEnabled: true });
+        videoRoom.localParticipant.setMediaView(
+          localMediaView as HTMLMediaElement
+        );
+        videoRoom.on(
+          "remoteParticipantStreamStarted",
+          (remoteParticipant: SendBirdCall.RemoteParticipant) => {
+            const remoteMediaView = document.createElement("video");
+            remoteMediaView.setAttribute("width", "300px");
+            remoteMediaView.setAttribute("height", "200px");
+
+            remoteMediaView.autoplay = true;
+            remoteParticipant.setMediaView(remoteMediaView);
+            videoContainer?.appendChild(remoteMediaView);
+          }
+        );
+      }
     });
-  }, [userData.nickname, userData.sendbirdAccessToken]);
+    return () => {
+      if (videoRoom) {
+        videoRoom.exit();
+      }
+    };
+  }, [userData.nickname, userData.sendbirdAccessToken, videoRoom]);
 
   return (
     <div>
-      <div>
-        <video id="remote_video_element_id" autoPlay></video>
+      <div id="video_container">
+        <video
+          width="300px"
+          height="200px"
+          id="local_video_element_id"
+          autoPlay
+        />
       </div>
       <div>
         <select

@@ -1,9 +1,9 @@
+import firebase from "firebase";
 import { useEffect, useRef, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { UserData, userDataState } from "../store/basic";
 import Editor, { Monaco } from "@monaco-editor/react";
 import { fromMonaco } from "@hackerrank/firepad";
-import firebase from "firebase";
 
 type CodeShareProps = {
   id: string;
