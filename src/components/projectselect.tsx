@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { projectListState, UserData, userDataState } from "../store/basic";
 import { CodeShare } from "./codeshare";
-import SendBirdCall, { Room } from "sendbird-calls";
+import SendBirdCall from "sendbird-calls";
 
 export const ProjectSelect = () => {
   const userData = useRecoilValue(userDataState) as UserData;
@@ -12,6 +12,12 @@ export const ProjectSelect = () => {
   const videoContainer = document.getElementById("video_container");
   const localMediaView = document.getElementById("local_video_element_id");
   const [videoRoom, setVideoRoom] = useState(null as any);
+
+  window.addEventListener("beforeunload", (event) => {
+    if (videoRoom) {
+      videoRoom.exit();
+    }
+  });
 
   useEffect(() => {
     axios({
@@ -55,10 +61,16 @@ export const ProjectSelect = () => {
             const remoteMediaView = document.createElement("video");
             remoteMediaView.setAttribute("width", "300px");
             remoteMediaView.setAttribute("height", "200px");
-
+            remoteMediaView.setAttribute("id", remoteParticipant.participantId);
             remoteMediaView.autoplay = true;
             remoteParticipant.setMediaView(remoteMediaView);
             videoContainer?.appendChild(remoteMediaView);
+          }
+        );
+        videoRoom.on(
+          "remoteParticipantExited",
+          (remoteParticipant: SendBirdCall.RemoteParticipant) => {
+            document.getElementById(remoteParticipant.participantId)?.remove();
           }
         );
       }
@@ -68,7 +80,13 @@ export const ProjectSelect = () => {
         videoRoom.exit();
       }
     };
-  }, [userData.nickname, userData.sendbirdAccessToken, videoRoom]);
+  }, [
+    userData.nickname,
+    userData.sendbirdAccessToken,
+    videoRoom,
+    localMediaView,
+    videoContainer,
+  ]);
 
   return (
     <div>
