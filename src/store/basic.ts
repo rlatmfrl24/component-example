@@ -8,6 +8,8 @@ export class UserData {
   userSkill: string[];
   projects: string[];
   sendbirdAccessToken: string;
+  positionX: number;
+  positionY: number;
 
   constructor(data: any) {
     this.nickname = data.nickname;
@@ -17,6 +19,8 @@ export class UserData {
     this.userSkill = data.userSkill;
     this.projects = data.projects;
     this.sendbirdAccessToken = data.sendbirdAccessToken;
+    this.positionX = data.positionX;
+    this.positionY = data.positionY;
   }
 }
 
@@ -40,6 +44,8 @@ export const userDataState = atom({
     userSkill: [],
     projects: [],
     sendbirdAccessToken: "",
+    positionX: -1,
+    positionY: -1,
   }),
 });
 
